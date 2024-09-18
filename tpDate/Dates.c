@@ -27,7 +27,7 @@ void initialiseDate(Date* d){//on utilise une adresse de date pour la modificati
     
     printf("jour : ");
     scanf("%hu",&(d->jour));//va remplacer dans la struct de d le champ jour
-    printf("mois :");
+    printf("mois :");   
     scanf("%d",(int*)&d->mois);// on caste le mois* en int*
     printf("annee : ");
     scanf("%hu",&d->annee);

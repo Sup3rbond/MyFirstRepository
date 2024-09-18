@@ -9,27 +9,27 @@ int* repeat (int tab1[] , int tab2[], int taille){
     
     int* ptab =(int*) malloc(sum);
     
+    int decalage = 0;
     for (int i=0; i<taille;i++){
         for (int j=0;j<tab1[i];j++){
-            *(ptab+j+tab1[i])=tab2[i];
+            ptab[decalage+j]=tab2[i];
 
         }
-
+        decalage = tab1[i];
     }
 
-    int* out =ptab;
-    free(ptab);
-    return(out);
-
+    return ptab;
 }
 
 int main (void){
     int tab1[] ={1,2,4};
     int tab2[] ={10,3,8};
-    int taille = sizeof(tab1);
-    printf("%hu",taille);
+    int taille = 3;
     int* repete= repeat(tab1,tab2,taille);
-    int test = *repete;
-    printf("%hu",test);
-
+    for (int i=0;i<7;i++){
+        int temp = repete[i];
+        printf("%d ",temp);
+    }
+    free(repete);
+    
 }
