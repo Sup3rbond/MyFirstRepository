@@ -25,22 +25,40 @@ typedef struct{
 }Winner;
 
 
-void miseEnMemoire(char* fileName, char* outputFilename){
-	FILE* f = fopen(fileName,"r");
-	FILE* out = fopen(outputFileName,"w");
+/*
+void initialiserTailleDesChamps(char* ligneEnMemoire,int* tabAModifier){
+			int count=0;
+			int indiceChampActuel =0;
+			char currentChar = ligneEnMemoire[count];
+			while (currentChar!="\0"){
+				if (currentChar!=";"){
+					tabAModifier[indiceChampActuel]++;}
+				else{
+					indiceChampActuel+=1;
+				}
+			count+=1;
+
+	
+}
+*/
+Winner* readWinners(FILE* f){
+	
 	bool finAtteinte = false;
 	char* ligneEnMemoire;
+	ligneEnMemoire = fgets(ligneEnMemoire,500,f);
+	printf("%c",ligneEnMemoire[0]);
 	while (!finAtteinte){
-
 		ligneEnMemoire = fgets(ligneEnMemoire,500,f);
-		finAtteinte = (fgets==NULL);
 		
+	}
+	Winner out;
+	return(&out);
 	}
 
 
 
 
-}
+
 
 
 
@@ -56,7 +74,11 @@ int main(int argc, char** argv)
 {
 	char filename[] = "turingWinners.csv";
 	char outputFilename[] = "out.csv";
+	FILE* f = fopen(filename,"r");
+	FILE* out = fopen(outputFilename,"w");
+	//int numberOfTuringWinners = numberOfLines(dataFile);
+	Winner* winners =readWinners(f);
     // TODO
-	fclose();
+	
 	return EXIT_SUCCESS;
 }
