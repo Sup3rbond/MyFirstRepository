@@ -1,4 +1,4 @@
-/**
+/*
  Compilation
  gcc --std=c99 -W -Wall -o prixTuring prixTuring.c
 
@@ -8,7 +8,7 @@
  Tests
  diff out.csv turingWinners.csv
 
-**/
+*/
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,17 +44,21 @@ void separationChamps(char* pointeurLigne, Winner* gagnantTraite){
 	char* decoupe;
 	char *ligneModifiee = strdup(pointeurLigne);
 	decoupe = strtok(ligneModifiee,";");
+	//printf("%s\n", decoupe);
 	
 	if (decoupe !=NULL){
-		*(gagnantTraite->name)= *decoupe;
-	}
-	strtok(ligneModifiee,";");
+		(gagnantTraite->year)=strdup(decoupe);
+		}
+		
+	
+	decoupe=strtok(NULL,";");
 	if (decoupe !=NULL){
-		*(gagnantTraite->year) = *decoupe;
+		(gagnantTraite->name) = strdup(decoupe);
 	}
-	strtok(ligneModifiee,";");
+
+	decoupe=strtok(NULL,";");
 	if (decoupe !=NULL){
-		*(gagnantTraite->topic) = *decoupe;
+		(gagnantTraite->topic) = strdup(decoupe);
 	}
 	
 	free(ligneModifiee);
@@ -92,7 +96,7 @@ Winner* readWinners (FILE* dataFile, int numberOfTuringWinners){
 void afficherGagnants(Winner* listeGagnants, int nombreDeGagnants) {
     for (int i = 0; i < nombreDeGagnants; i++) {
         printf("Gagnant %d:\n", i + 1);
-        printf(" Année: %s\n", listeGagnants[i].year ? listeGagnants[i].year : "Non défini");
+        printf(" Année: %s\n", *(listeGagnants[i].year) ? listeGagnants[i].year : "Non défini");
         printf(" Nom: %s\n", listeGagnants[i].name ? listeGagnants[i].name : "Non défini");
         printf(" Sujet: %s\n\n", listeGagnants[i].topic ? listeGagnants[i].topic : "Non défini");
     }
@@ -112,10 +116,9 @@ int main(int argc, char** argv)
 	FILE* dataFile = fopen(filename,"r");
 	FILE* out = fopen(outputFilename,"w");
 	int numberOfTuringWinners = numberOfLines(dataFile);
-	printf("%hu",numberOfTuringWinners);
 	fseek(dataFile, 0, SEEK_SET);
 	Winner* test = readWinners(dataFile, numberOfTuringWinners);
-	afficherGagnants(test,numberOfTuringWinners);
+	afficherGagnants(test,20);
 	free(test);
 	return EXIT_SUCCESS;
 }
