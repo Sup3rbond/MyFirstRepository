@@ -92,18 +92,18 @@ Winner* readWinners (FILE* dataFile, int numberOfTuringWinners){
 }
 
 
-
-void afficherGagnants(Winner* listeGagnants, int nombreDeGagnants) {
+void reecriture(FILE* outFile, Winner* listeGagnants, int nombreDeGagnants) {
     for (int i = 0; i < nombreDeGagnants; i++) {
-        printf("Gagnant %d:\n", i + 1);
-        printf(" Année: %s\n", *(listeGagnants[i].year) ? listeGagnants[i].year : "Non défini");
-        printf(" Nom: %s\n", listeGagnants[i].name ? listeGagnants[i].name : "Non défini");
-        printf(" Sujet: %s\n\n", listeGagnants[i].topic ? listeGagnants[i].topic : "Non défini");
-    }
+        Winner gagnant = listeGagnants[i];
+
+        
+        fprintf(outFile, "%s;%s;%s\n", 
+                gagnant.year,   
+                gagnant.name,  
+                gagnant.topic);
+
 }
-
-
-
+}
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // MAIN
@@ -118,7 +118,9 @@ int main(int argc, char** argv)
 	int numberOfTuringWinners = numberOfLines(dataFile);
 	fseek(dataFile, 0, SEEK_SET);
 	Winner* test = readWinners(dataFile, numberOfTuringWinners);
-	afficherGagnants(test,20);
+	reecriture(out, test,numberOfTuringWinners);
 	free(test);
+	fclose(out);
+	fclose(dataFile);
 	return EXIT_SUCCESS;
 }
