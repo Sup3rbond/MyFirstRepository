@@ -19,49 +19,84 @@
 
 
 typedef struct{
-	unsigned short year;
+	char* year;
 	char* name;// ne pas oublier les \0
 	char * topic;
 }Winner;
 
 
-/*
-void initialiserTailleDesChamps(char* ligneEnMemoire,int* tabAModifier){
-			int count=0;
-			int indiceChampActuel =0;
-			char currentChar = ligneEnMemoire[count];
-			while (currentChar!="\0"){
-				if (currentChar!=";"){
-					tabAModifier[indiceChampActuel]++;}
-				else{
-					indiceChampActuel+=1;
-				}
+int numberOfLines(FILE* dataFile){
+	int count = 0;
+	char currentChar = fgetc(dataFile);
+	while (currentChar!=EOF){
+		if (currentChar=='\n'){
 			count+=1;
-
-	
+		}
+		currentChar = fgetc(dataFile);
+	}
+	count+=1;
+	return(count);
 }
-*/
-Winner* readWinners(FILE* f){
+
+
+void separationChamps(char* pointeurLigne, Winner* gagnantTraite){
 	
-	bool finAtteinte = false;
-	char* ligneEnMemoire;
-	ligneEnMemoire = fgets(ligneEnMemoire,500,f);
-	printf("%c",ligneEnMemoire[0]);
-	while (!finAtteinte){
-		ligneEnMemoire = fgets(ligneEnMemoire,500,f);
+	char* decoupe;
+	char *ligneModifiee = strdup(pointeurLigne);
+	decoupe = strtok(ligneModifiee,";");
+	
+	if (decoupe !=NULL){
+		*(gagnantTraite->name)= *decoupe;
+	}
+	strtok(ligneModifiee,";");
+	if (decoupe !=NULL){
+		*(gagnantTraite->year) = *decoupe;
+	}
+	strtok(ligneModifiee,";");
+	if (decoupe !=NULL){
+		*(gagnantTraite->topic) = *decoupe;
+	}
+	
+	free(ligneModifiee);
+
+	
+
+}
+
+
+void constructionStruct( FILE* dataFile, Winner* listeGagnants,int numberOfTuringWinners){
+	for (int i=0; i<numberOfTuringWinners;i++){
+		Winner* gagnantTraite = &(listeGagnants[i]);
+		char* pointeurLigne = calloc(500, sizeof(char));
+		fgets(pointeurLigne,500,dataFile);
+		separationChamps(pointeurLigne, gagnantTraite);
+		free(pointeurLigne);
 		
+		
+
+
 	}
-	Winner out;
-	return(&out);
-	}
+}
+
+
+Winner* readWinners (FILE* dataFile, int numberOfTuringWinners){
+	Winner* listeGagnants = calloc(numberOfTuringWinners,sizeof(Winner));
+	constructionStruct(dataFile, listeGagnants, numberOfTuringWinners);
+	return(listeGagnants);
+
+
+}
 
 
 
-
-
-
-
-
+void afficherGagnants(Winner* listeGagnants, int nombreDeGagnants) {
+    for (int i = 0; i < nombreDeGagnants; i++) {
+        printf("Gagnant %d:\n", i + 1);
+        printf(" Année: %s\n", listeGagnants[i].year ? listeGagnants[i].year : "Non défini");
+        printf(" Nom: %s\n", listeGagnants[i].name ? listeGagnants[i].name : "Non défini");
+        printf(" Sujet: %s\n\n", listeGagnants[i].topic ? listeGagnants[i].topic : "Non défini");
+    }
+}
 
 
 
@@ -74,11 +109,13 @@ int main(int argc, char** argv)
 {
 	char filename[] = "turingWinners.csv";
 	char outputFilename[] = "out.csv";
-	FILE* f = fopen(filename,"r");
+	FILE* dataFile = fopen(filename,"r");
 	FILE* out = fopen(outputFilename,"w");
-	//int numberOfTuringWinners = numberOfLines(dataFile);
-	Winner* winners =readWinners(f);
-    // TODO
-	
+	int numberOfTuringWinners = numberOfLines(dataFile);
+	printf("%hu",numberOfTuringWinners);
+	fseek(dataFile, 0, SEEK_SET);
+	Winner* test = readWinners(dataFile, numberOfTuringWinners);
+	afficherGagnants(test,numberOfTuringWinners);
+	free(test);
 	return EXIT_SUCCESS;
 }
