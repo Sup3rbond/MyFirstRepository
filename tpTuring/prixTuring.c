@@ -97,12 +97,24 @@ void reecriture(FILE* outFile, Winner* listeGagnants, int nombreDeGagnants) {
         Winner gagnant = listeGagnants[i];
 
         
-        fprintf(outFile, "%s;%s;%s\n", 
+        fprintf(outFile, "%s;%s;%s", 
                 gagnant.year,   
                 gagnant.name,  
                 gagnant.topic);
 
 }
+}
+
+
+void infoAnnee(int annee,Winner* listeGagnants, int numberOfTuringWinners){
+	for (int i=0; i<numberOfTuringWinners;i++){
+		if (atoi(listeGagnants[i].year)==annee){
+			printf("%s",listeGagnants[i].name);
+			printf("%s", listeGagnants[i].topic);
+
+		}
+	}
+
 }
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -118,6 +130,7 @@ int main(int argc, char** argv)
 	int numberOfTuringWinners = numberOfLines(dataFile);
 	fseek(dataFile, 0, SEEK_SET);
 	Winner* test = readWinners(dataFile, numberOfTuringWinners);
+	infoAnnee(1970,test,numberOfTuringWinners);
 	reecriture(out, test,numberOfTuringWinners);
 	free(test);
 	fclose(out);
